@@ -55,21 +55,21 @@ def benchmark():
     for j in range(10):
 
       start = datetime.now()
-      g = Greedy(kdct['weights'], kdct['profits'], kdct['capacity'][0])
+      g = greedy.Greedy(kdct['weights'], kdct['profits'], kdct['capacity'][0])
       knapsack = g.solve()
       end = datetime.now()
       greedy_time.append((end - start).total_seconds() * 1000)
       greedy_solution.append(get_ans(kdct['profits'], knapsack))
 
       start = datetime.now()
-      d = Dynamic(kdct['weights'], kdct['profits'], kdct['capacity'][0])
+      d = dynamic.Dynamic(kdct['weights'], kdct['profits'], kdct['capacity'][0])
       knapsack = d.solve()
       end = datetime.now()
       dynamic_time.append((end - start).total_seconds() * 1000)
       dynamic_solution.append(get_ans(kdct['profits'], knapsack))
 
       start = datetime.now()
-      gen = Genetic(kdct['weights'], kdct['profits'], kdct['capacity'][0],
+      gen = genetic.Genetic(kdct['weights'], kdct['profits'], kdct['capacity'][0],
                     int(len(kdct['profits'] ) * 0.9), int(len(kdct['profits']) * 1.9))
       knapsack = gen.solve()
       end = datetime.now()
@@ -77,7 +77,7 @@ def benchmark():
       genetic_solution.append(get_ans(kdct['profits'], knapsack))
 
       start = datetime.now()
-      b = BnB_solver(kdct['weights'], kdct['profits'], kdct['capacity'][0])
+      b = bnb.BnB_solver(kdct['weights'], kdct['profits'], kdct['capacity'][0])
       knapsack = b.solve()
       end = datetime.now()
       bnb_time.append((end - start).total_seconds() * 1000)
@@ -140,21 +140,21 @@ def benchmark2(directory_task, directory_answer):
     optimal_solutions.append(int(handle_answer.readline()))
     for j in range(5):
       start = datetime.now()
-      g = Greedy(weights, profits, capacity)
+      g = greedy.Greedy(weights, profits, capacity)
       knapsack = g.solve()
       end = datetime.now()
       greedy_time.append((end - start).total_seconds() * 1000)
       greedy_solution.append(get_ans(profits, knapsack))
 
       start = datetime.now()
-      d = Dynamic(weights, profits, capacity)
+      d = dynamic.Dynamic(weights, profits, capacity)
       knapsack = d.solve()
       end = datetime.now()
       dynamic_time.append((end - start).total_seconds() * 1000)
       dynamic_solution.append(get_ans(profits, knapsack))
 
       start = datetime.now()
-      gen = Genetic(weights, profits, capacity,
+      gen = genetic.Genetic(weights, profits, capacity,
                     int(len(profits) * 0.9), int(len(kdct['profits']) * 1.9))
       knapsack = gen.solve()
       end = datetime.now()
@@ -162,7 +162,7 @@ def benchmark2(directory_task, directory_answer):
       genetic_solution.append(get_ans(profits, knapsack))
 
       start = datetime.now()
-      b = BnB_solver(weights, profits, capacity)
+      b = bnb.BnB_solver(weights, profits, capacity)
       knapsack = b.solve()
       end = datetime.now()
       bnb_time.append((end - start).total_seconds() * 1000)
