@@ -1,17 +1,18 @@
 class Genetic:
-  def __init__(self, weights, profits, capacity):
+  def __init__(self, weights, profits, capacity, start_num_chromosomes, num_chromosomes):
     if (len(weights) != len(profits)):
       raise TypeError("Error! Size of weights not equal size of profits!")
     self.weights = weights
     self.profits = profits
     self.capacity = capacity
+    self.start_num_chromosomes = start_num_chromosomes
+    self.num_chromosomes = num_chromosomes
     self.num_items = len(weights)
     self.knapsack = []
     self.population = []
 
   def solve(self):
-    num_chromosomes = self.num_items
-    self.generate_population(num_chromosomes)
+    self.generate_population(self.start_num_chromosomes)
     while(1):
       value_population, fit_population = self.fit_fun()
       flag, max_ind = self.check_population(value_population, fit_population)
@@ -19,7 +20,7 @@ class Genetic:
         self.knapsack = self.population[max_ind]
         return self.knapsack
       else:
-        new_population = self.group_selection(fit_population, int(self.num_items * 0.5))
+        new_population = self.group_selection(fit_population, self.num_chromosomes)
         self.population = self.mutation(new_population)
 
   def generate_population(self, num_chromosomes):
@@ -30,30 +31,21 @@ class Genetic:
     fit_population = []
     value_population = []
     for chromosomes in self.population:
-      total_value = 0
-      for i in range(self.num_items):
-        total_value += chromosomes[i] * self.weights[i]
+      total_value = sum([chromosomes[i] * self.weights[i] for i in range(self.num_items)])
       while (total_value > self.capacity):
-        ind_for_change = random.randint(0, self.num_items - 1)
-        if(chromosomes[ind_for_change] == 0):
-          continue
-        else:
-          chromosomes[ind_for_change] = 0
-          total_value = 0
-          for i in range(self.num_items):
-            total_value += chromosomes[i] * self.weights[i]
+        indexes = [i for i, v in enumerate(chromosomes) if v == 1]
+        ind_for_change = random.choices(indexes)[0]
+        chromosomes[ind_for_change] = 0
+        total_value = sum([chromosomes[i] * self.weights[i] for i in range(self.num_items)])
       value_population.append(total_value)
-      total_fit = 0
-      for i in range(self.num_items):
-        total_fit += chromosomes[i] * self.profits[i]
-      fit_population.append(total_fit)
+      fit_population.append(sum([chromosomes[i] * self.profits[i] for i in range(self.num_items)]))
     return (value_population, fit_population)
 
   def check_population(self, value_population, fit_population):
     max_value = max(fit_population)
     max_ind = fit_population.index(max_value)
     max_count = fit_population.count(max_value)
-    if(max_count >= (0.9 * self.num_items)):
+    if(max_count >= (0.6 * self.num_items)):
       return (True, max_ind)
     else:
       return (False, max_ind)

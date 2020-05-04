@@ -14,7 +14,7 @@ class Dynamic:
     for i in range(self.num_items, 0, -1):
         if m[i][k] != m[i - 1][k]:
             self.knapsack[i - 1] = 1
-            k -= weights[i - 1]
+            k -= self.weights[i - 1]
     return self.knapsack
 
   def dynamic(self):

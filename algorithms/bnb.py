@@ -20,11 +20,11 @@ class BnB_solver:
                       bounds = bounds,
                       method = 'revised simplex')
     x = solution.x
-    ans = -solution.fun
+    ans = - round(solution.fun, 5)
     if((not solution.success) or (low_bound >= ans)):
       return (0, [])
 
-    sorted_x = sorted(range(self.num_items),  key=lambda i:x[i], reverse=True)
+    sorted_x = sorted(range(self.num_items),  key=lambda i:x[i], reverse=False)
     find_int_solution = True
 
     for i in sorted_x:
@@ -37,6 +37,7 @@ class BnB_solver:
           optimal_solution = new_solution
 
         bounds[i] = [1, 1]
+
         new_bound, new_solution = self.BnB(bounds, low_bound, optimal_solution)
         if(new_bound):
           low_bound = new_bound
