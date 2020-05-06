@@ -2,5 +2,5 @@
 Implemented:
   + Greedy
   + Dynamic programming
-  + Genetic agorithm
+  + Genetic algorithm
   + Branch-and-bound
